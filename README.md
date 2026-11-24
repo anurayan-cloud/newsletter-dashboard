@@ -32,8 +32,13 @@ reports, date/audience filters and automatic insights.
 4. Make sure `git push` works non-interactively from this machine
    (`gh auth login` + `gh auth setup-git`, or a stored credential).
 5. `npm run fetch` — pulls from Zoho and publishes.
-6. Schedule `node fetch-data.js` (working directory = this folder) to run
-   every 30 minutes, e.g. with Windows Task Scheduler (`NewsletterDashboardFetch`).
+6. Schedule it to run every 30 minutes with Windows Task Scheduler
+   (task `NewsletterDashboardFetch`). Point the task at a small wrapper such as
+   `run-fetch.cmd` that does `cd /d <this folder>` and
+   `node fetch-data.js >> data\fetch.log 2>&1` — launching `node.exe` directly
+   from Task Scheduler got killed with exit code `0xC000013A` on this PC, and
+   the wrapper also leaves a log to check. (`run-fetch.cmd` is machine-specific
+   and git-ignored.)
 
 ## Local preview
 
