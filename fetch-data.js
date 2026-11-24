@@ -281,7 +281,28 @@ function git(...args) {
     cwd: __dirname,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
+    // Never hang waiting for an interactive credential prompt (e.g. under Task Scheduler).
+    env: { ...process.env, GIT_TERMINAL_PROMPT: '0' },
   }).trim();
+}
+
+// Plain `git push` relies on a git credential helper. On some machines that
+// helper isn't usable from a scheduled task, so fall back to authenticating
+// this one push with the GitHub CLI's existing login token (nothing is stored).
+function pushToGitHub() {
+  try {
+    git('push');
+    return;
+  } catch (firstError) {
+    let token;
+    try {
+      token = execFileSync('gh', ['auth', 'token'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    } catch {
+      throw firstError;
+    }
+    const basic = Buffer.from(`x-access-token:${token}`).toString('base64');
+    git('-c', 'credential.helper=', '-c', `http.https://github.com/.extraheader=AUTHORIZATION: basic ${basic}`, 'push');
+  }
 }
 
 // Publishing = commit + push of docs/data.json. GitHub Pages then serves the
@@ -298,7 +319,7 @@ function publishToGitHub() {
     return false;
   }
   git('commit', '-m', `Update newsletter data (${new Date().toISOString().slice(0, 16)}Z)`);
-  git('push');
+  pushToGitHub();
   return true;
 }
 
@@ -319,4 +340,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { refresh, DATA_FILE };
+module.exports = { refresh, DATA_FILE, publishToGitHub };
