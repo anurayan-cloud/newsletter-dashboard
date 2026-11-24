@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Newsletter Analytics</title>
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Newsletter Analytics</h1>
+    <div class="topbar-actions">
+      <span id="lastUpdated" class="muted">—</span>
+      <button id="refreshBtn" class="btn">Reload</button>
+    </div>
+  </header>
+
+  <main id="app">
+    <section id="setupNotice" class="notice hidden">
+      No data published yet. Run <code>npm run fetch</code> on the machine with Zoho API access configured
+      (see <code>README.md</code>) to pull and publish the latest newsletter stats.
+    </section>
+
+    <section class="panel filter-bar">
+      <div class="filter-field">
+        <label for="dateFrom">From</label>
+        <input type="date" id="dateFrom" />
+      </div>
+      <div class="filter-field">
+        <label for="dateTo">To</label>
+        <input type="date" id="dateTo" />
+      </div>
+      <div class="filter-field">
+        <label for="audienceFilter">Audience</label>
+        <select id="audienceFilter">
+          <option value="">All</option>
+          <option value="Doctors">Doctors</option>
+          <option value="Marketing">Marketing</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button id="applyFilterBtn" class="btn">Apply</button>
+        <button id="clearFilterBtn" class="btn btn-secondary">Clear</button>
+      </div>
+      <span id="filterSummary" class="muted"></span>
+    </section>
+
+    <section class="panel">
+      <h2>Insights</h2>
+      <div id="insightsList" class="insights-list"></div>
+    </section>
+
+    <section id="summaryCards" class="cards"></section>
+
+    <section class="panel">
+      <h2>Doctors vs Marketing audience</h2>
+      <div class="table-wrap">
+        <table id="audienceTable">
+          <thead>
+            <tr>
+              <th>Audience</th>
+              <th>Newsletters</th>
+              <th>Sent</th>
+              <th>Delivered</th>
+              <th>Opened</th>
+              <th>Open rate</th>
+              <th>Clicked</th>
+              <th>Click rate</th>
+              <th>Replies</th>
+              <th>Reply rate</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Open &amp; click rate by newsletter</h2>
+      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <h2>Monthly report</h2>
+      <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
+      <div class="table-wrap">
+        <table id="monthlyTable">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Newsletters</th>
+              <th>Sent</th>
+              <th>Delivered</th>
+              <th>Opened</th>
+              <th>Open rate</th>
+              <th>Clicked</th>
+              <th>Click rate</th>
+              <th>Replies</th>
+              <th>Unsub</th>
+              <th>Bounced</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Quarterly report</h2>
+      <div class="chart-wrap"><canvas id="quarterlyChart"></canvas></div>
+      <div class="table-wrap">
+        <table id="quarterlyTable">
+          <thead>
+            <tr>
+              <th>Quarter</th>
+              <th>Newsletters</th>
+              <th>Sent</th>
+              <th>Delivered</th>
+              <th>Opened</th>
+              <th>Open rate</th>
+              <th>Clicked</th>
+              <th>Click rate</th>
+              <th>Replies</th>
+              <th>Unsub</th>
+              <th>Bounced</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>All newsletters</h2>
+      <div class="table-wrap">
+        <table id="campaignTable">
+          <thead>
+            <tr>
+              <th>Newsletter</th>
+              <th>Audience</th>
+              <th>Sent date</th>
+              <th>Sent</th>
+              <th>Delivered</th>
+              <th>Opened</th>
+              <th>Open rate</th>
+              <th>Clicked</th>
+              <th>Click rate</th>
+              <th>Replies</th>
+              <th>Unsub</th>
+              <th>Spam</th>
+              <th>Bounced</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="vendor/chart.umd.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
